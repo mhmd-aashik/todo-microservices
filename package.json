@@ -17,7 +17,13 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/todo-microservices/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/todo-microservices/test/jest-e2e.json",
+    "start:gateway": "nest start api-gateway --watch",
+    "start:todo": "nest start todo-service --watch",
+    "start:notification": "nest start notification-service --watch",
+    "build:gateway": "nest build api-gateway",
+    "build:todo": "nest build todo-service",
+    "build:notification": "nest build notification-service"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -68,7 +74,13 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/apps/"
-    ]
+      "<rootDir>/apps/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",
+      "^@app/grpc-contracts(|/.*)$": "<rootDir>/libs/grpc-contracts/src/$1",
+      "^@app/kafka-contracts(|/.*)$": "<rootDir>/libs/kafka-contracts/src/$1"
+    }
   }
 }

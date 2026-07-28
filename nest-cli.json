@@ -19,6 +19,33 @@
         "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
       }
     },
+    "common": {
+      "type": "library",
+      "root": "libs/common",
+      "entryFile": "index",
+      "sourceRoot": "libs/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/common/tsconfig.lib.json"
+      }
+    },
+    "grpc-contracts": {
+      "type": "library",
+      "root": "libs/grpc-contracts",
+      "entryFile": "index",
+      "sourceRoot": "libs/grpc-contracts/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/grpc-contracts/tsconfig.lib.json"
+      }
+    },
+    "kafka-contracts": {
+      "type": "library",
+      "root": "libs/kafka-contracts",
+      "entryFile": "index",
+      "sourceRoot": "libs/kafka-contracts/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/kafka-contracts/tsconfig.lib.json"
+      }
+    },
     "notification-service": {
       "type": "application",
       "root": "apps/notification-service",

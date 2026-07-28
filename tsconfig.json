@@ -21,6 +21,25 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "paths": {}
+    "paths": {
+      "@app/common": [
+        "libs/common/src"
+      ],
+      "@app/common/*": [
+        "libs/common/src/*"
+      ],
+      "@app/grpc-contracts": [
+        "libs/grpc-contracts/src"
+      ],
+      "@app/grpc-contracts/*": [
+        "libs/grpc-contracts/src/*"
+      ],
+      "@app/kafka-contracts": [
+        "libs/kafka-contracts/src"
+      ],
+      "@app/kafka-contracts/*": [
+        "libs/kafka-contracts/src/*"
+      ]
+    }
   }
 }
