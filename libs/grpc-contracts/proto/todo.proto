@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package todo;
+
+service TodoService {
+ rpc CreateTodo (CreateTodoRequest) returns (TodoResponse);
+ rpc FindAllTodos(FindAllTodosRequest) returns (FindAllTodosResponse);
+ rpc FindOneTodo(FindOneTodoRequest) returns (TodoResponse);
+ rpc UpdateTodo(UpdateTodoRequest) returns (TodoResponse);
+ rpc DeleteTodo(DeleteTodoRequest) returns (DeleteTodoResponse);
+}
+
+message CreateTodoRequest {
+ string user_id = 1;
+ string title = 2;
+ optional string description = 3;
+}
+
+message FindAllTodosRequest {
+ string user_id = 1;
+}
+
+message FindOneTodoRequest {
+ string user_id = 1;
+ string todo_id = 2;
+}
+
+message UpdateTodoRequest {
+ string user_id = 1;
+ string todo_id = 2;
+ optional string title = 3;
+ optional string description = 4;
+ optional bool completed = 5;
+}
+
+message DeleteTodoRequest {
+ string user_id = 1;
+ string todo_id = 2;
+}
+
+message TodoResponse {
+ string id = 1;
+ string user_id = 2;
+ string title = 3;
+ optional string description = 4;
+ bool completed = 5;
+ string created_at = 6;
+ string updated_at = 7;
+}
+
+message FindAllTodosResponse {
+ repeated TodoResponse todos = 1;
+}
+
+message DeleteTodoResponse {
+ bool deleted = 1;
+}
