@@ -18,6 +18,24 @@
       "compilerOptions": {
         "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
       }
+    },
+    "notification-service": {
+      "type": "application",
+      "root": "apps/notification-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/notification-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/notification-service/tsconfig.app.json"
+      }
+    },
+    "todo-service": {
+      "type": "application",
+      "root": "apps/todo-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/todo-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/todo-service/tsconfig.app.json"
+      }
     }
   }
 }
