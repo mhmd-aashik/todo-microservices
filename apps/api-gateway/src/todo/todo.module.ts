@@ -28,7 +28,6 @@ import { TodoService } from './todo.service';
             longs: String,
             enums: String,
             defaults: true,
-            oneofs: true,
           },
         },
       },

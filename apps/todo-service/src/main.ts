@@ -18,7 +18,6 @@ async function bootstrap(): Promise<void> {
           longs: String,
           enums: String,
           defaults: true,
-          oneofs: true,
         },
       },
     },

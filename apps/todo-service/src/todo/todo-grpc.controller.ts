@@ -2,9 +2,15 @@ import { Controller } from '@nestjs/common';
 
 import {
   CreateTodoRequest,
+  DeleteTodoRequest,
+  DeleteTodoResponse,
+  FindAllTodosRequest,
+  FindAllTodosResponse,
+  FindOneTodoRequest,
   TodoResponse,
   TodoServiceController,
   TodoServiceControllerMethods,
+  UpdateTodoRequest,
 } from '@app/grpc-contracts';
 
 import { toTodoResponse } from './todo.mapper';
@@ -21,19 +27,34 @@ export class TodoGrpcController implements TodoServiceController {
     return toTodoResponse(todo);
   }
 
-  findAllTodos(): never {
-    throw new Error('Not implemented');
+  findAllTodos(request: FindAllTodosRequest): FindAllTodosResponse {
+    const todos = this.todoService.findAllByUserId(request.userId);
+
+    return {
+      todos: todos.map(toTodoResponse),
+    };
   }
 
-  findOneTodo(): never {
-    throw new Error('Not implemented');
+  findOneTodo(request: FindOneTodoRequest): TodoResponse {
+    const todo = this.todoService.findOneByUserId(
+      request.userId,
+      request.todoId,
+    );
+
+    return toTodoResponse(todo);
   }
 
-  updateTodo(): never {
-    throw new Error('Not implemented');
+  updateTodo(request: UpdateTodoRequest): TodoResponse {
+    const todo = this.todoService.update(request);
+
+    return toTodoResponse(todo);
   }
 
-  deleteTodo(): never {
-    throw new Error('Not implemented');
+  deleteTodo(request: DeleteTodoRequest): DeleteTodoResponse {
+    const deleted = this.todoService.delete(request.userId, request.todoId);
+
+    return {
+      deleted,
+    };
   }
 }
