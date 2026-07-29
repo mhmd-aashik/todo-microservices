@@ -24,7 +24,10 @@
     "build:gateway": "nest build api-gateway",
     "build:todo": "nest build todo-service",
     "build:notification": "nest build notification-service",
-    "proto:generate": "mkdir -p ./libs/grpc-contracts/src/generated && grpc_tools_node_protoc --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./libs/grpc-contracts/src/generated --ts_proto_opt=nestJs=true,addGrpcMetadata=true,useOptionals=messages,forceLong=string,esModuleInterop=true --proto_path=./libs/grpc-contracts/proto ./libs/grpc-contracts/proto/*.proto"
+    "proto:generate": "mkdir -p ./libs/grpc-contracts/src/generated && grpc_tools_node_protoc --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./libs/grpc-contracts/src/generated --ts_proto_opt=nestJs=true,addGrpcMetadata=true,useOptionals=messages,forceLong=string,esModuleInterop=true --proto_path=./libs/grpc-contracts/proto ./libs/grpc-contracts/proto/*.proto",
+    "prisma:todo:generate": "prisma generate --config apps/todo-service/prisma.config.ts",
+    "prisma:todo:migrate": "prisma migrate dev --config apps/todo-service/prisma.config.ts",
+    "prisma:todo:studio": "prisma studio --config apps/todo-service/prisma.config.ts"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.14.4",
@@ -34,9 +37,12 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/microservices": "^11.1.28",
     "@nestjs/platform-express": "^11.0.1",
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "jose": "^6.2.4",
+    "pg": "^8.22.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
@@ -49,8 +55,10 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.0",
+    "@types/pg": "^8.20.0",
     "@types/supertest": "^7.0.0",
     "chokidar-cli": "^3.0.0",
+    "dotenv": "^17.4.2",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
@@ -58,6 +66,7 @@
     "grpc-tools": "^1.13.1",
     "jest": "^30.0.0",
     "prettier": "^3.4.2",
+    "prisma": "^7.9.1",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",

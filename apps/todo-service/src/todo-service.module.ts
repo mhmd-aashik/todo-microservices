@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
-import { TodoGrpcController } from './todo/todo-grpc.controller';
-import { TodoService } from './todo/todo.service';
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from './database/database.module';
+import { TodoModule } from './todo/todo.module';
 
 @Module({
-  imports: [],
-  controllers: [TodoGrpcController],
-  providers: [TodoService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: 'apps/todo-service/.env',
+    }),
+    DatabaseModule,
+    TodoModule,
+  ],
 })
 export class TodoServiceModule {}
