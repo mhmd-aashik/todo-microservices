@@ -61,7 +61,9 @@
       "entryFile": "main",
       "sourceRoot": "apps/todo-service/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/todo-service/tsconfig.app.json"
+        "tsConfigPath": "apps/todo-service/tsconfig.app.json",
+        "webpack": true,
+        "webpackConfigPath": "apps/todo-service/webpack.config.js"
       }
     }
   }

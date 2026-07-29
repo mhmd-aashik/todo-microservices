@@ -1,5 +1,3 @@
-import { randomUUID } from 'node:crypto';
-
 import { Injectable } from '@nestjs/common';
 
 import type { CreateTodoRequest, UpdateTodoRequest } from '@app/grpc-contracts';
@@ -8,82 +6,106 @@ import {
   invalidTodoTitleException,
   todoNotFoundException,
 } from './todo.errors';
+import { TodoRepository } from './todo.repository';
 import type { Todo } from './todo.types';
 
 @Injectable()
 export class TodoService {
-  private readonly todos = new Map<string, Todo>();
+  constructor(private readonly todoRepository: TodoRepository) {}
 
-  create(request: CreateTodoRequest): Todo {
+  create(request: CreateTodoRequest): Promise<Todo> {
     const title = request.title.trim();
 
     if (!title) {
       throw invalidTodoTitleException();
     }
 
-    const now = new Date();
-
-    const todo: Todo = {
-      id: randomUUID(),
+    return this.todoRepository.create({
       userId: request.userId,
       title,
-      description: request.description?.trim(),
-      completed: false,
-      createdAt: now,
-      updatedAt: now,
-    };
-
-    this.todos.set(todo.id, todo);
-
-    return todo;
+      description: this.normalizeOptionalDescription(request.description),
+    });
   }
 
-  findAllByUserId(userId: string): Todo[] {
-    return Array.from(this.todos.values()).filter(
-      (todo) => todo.userId === userId,
-    );
+  findAllByUserId(userId: string): Promise<Todo[]> {
+    return this.todoRepository.findAllByUserId(userId);
   }
 
-  findOneByUserId(userId: string, todoId: string): Todo {
-    const todo = this.todos.get(todoId);
+  async findOneByUserId(userId: string, todoId: string): Promise<Todo> {
+    const todo = await this.todoRepository.findOneByUserId(userId, todoId);
 
-    if (!todo || todo.userId !== userId) {
+    if (!todo) {
       throw todoNotFoundException();
     }
 
     return todo;
   }
 
-  update(request: UpdateTodoRequest): Todo {
-    const todo = this.findOneByUserId(request.userId, request.todoId);
+  async update(request: UpdateTodoRequest): Promise<Todo> {
+    const updateData: {
+      title?: string;
+      description?: string | null;
+      completed?: boolean;
+    } = {};
 
-    const title =
-      request.title !== undefined ? request.title.trim() : todo.title;
+    if (request.title !== undefined) {
+      const title = request.title.trim();
 
-    if (!title) {
-      throw invalidTodoTitleException();
+      if (!title) {
+        throw invalidTodoTitleException();
+      }
+
+      updateData.title = title;
     }
 
-    const updatedTodo: Todo = {
-      ...todo,
-      title,
-      description:
-        request.description !== undefined
-          ? request.description.trim()
-          : todo.description,
-      completed:
-        request.completed !== undefined ? request.completed : todo.completed,
-      updatedAt: new Date(),
-    };
+    if (request.description !== undefined) {
+      updateData.description = this.normalizeNullableDescription(
+        request.description,
+      );
+    }
 
-    this.todos.set(todo.id, updatedTodo);
+    if (request.completed !== undefined) {
+      updateData.completed = request.completed;
+    }
 
-    return updatedTodo;
+    const todo = await this.todoRepository.updateByUserId(
+      request.userId,
+      request.todoId,
+      updateData,
+    );
+
+    if (!todo) {
+      throw todoNotFoundException();
+    }
+
+    return todo;
   }
 
-  delete(userId: string, todoId: string): boolean {
-    const todo = this.findOneByUserId(userId, todoId);
+  async delete(userId: string, todoId: string): Promise<boolean> {
+    const deleted = await this.todoRepository.deleteByUserId(userId, todoId);
 
-    return this.todos.delete(todo.id);
+    if (!deleted) {
+      throw todoNotFoundException();
+    }
+
+    return true;
+  }
+
+  private normalizeOptionalDescription(
+    description: string | undefined,
+  ): string | undefined {
+    if (description === undefined) {
+      return undefined;
+    }
+
+    const normalized = description.trim();
+
+    return normalized || undefined;
+  }
+
+  private normalizeNullableDescription(description: string): string | null {
+    const normalized = description.trim();
+
+    return normalized || null;
   }
 }

@@ -64,6 +64,8 @@ services:
     depends_on:
       keycloak-postgres:
         condition: service_healthy
+    volumes:
+      - keycloak-data:/opt/keycloak/data
     networks:
       - todo-network
 
@@ -135,6 +137,9 @@ volumes:
 
   keycloak-postgres-data:
     name: todo-keycloak-postgres-data
+
+  keycloak-data:
+    name: todo-keycloak-data
 
   kafka-data:
     name: todo-kafka-data

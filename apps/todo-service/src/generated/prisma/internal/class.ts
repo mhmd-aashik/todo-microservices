@@ -12,7 +12,7 @@
  */
 
 import * as runtime from "@prisma/client/runtime/client"
-import type * as Prisma from "./prismaNamespace.js"
+import type * as Prisma from "./prismaNamespace"
 
 
 const config: runtime.GetPrismaClientConfig = {
@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.9.1",
   "engineVersion": "e922089b7d7502aff4249d5da3420f6fa55fc6ad",
   "activeProvider": "postgresql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Get a free hosted Postgres database in seconds: `npx create-db`\n\ngenerator client {\n  provider     = \"prisma-client\"\n  output       = \"../src/generated/prisma\"\n  moduleFormat = \"cjs\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Todo {\n  id          String   @id @default(uuid()) @db.Uuid\n  userId      String   @map(\"user_id\") @db.VarChar(255)\n  title       String   @db.VarChar(150)\n  description String?  @db.Text\n  completed   Boolean  @default(false)\n  createdAt   DateTime @default(now()) @map(\"created_at\") @db.Timestamptz(3)\n  updatedAt   DateTime @updatedAt @map(\"updated_at\") @db.Timestamptz(3)\n\n  @@index([userId])\n  @@index([userId, createdAt])\n  @@map(\"todos\")\n}\n",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Get a free hosted Postgres database in seconds: `npx create-db`\n\ngenerator client {\n  provider            = \"prisma-client\"\n  output              = \"../src/generated/prisma\"\n  moduleFormat        = \"cjs\"\n  // Nest webpack cannot resolve Prisma's default `.js` import paths to `.ts` sources\n  importFileExtension = \"\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Todo {\n  id          String   @id @default(uuid()) @db.Uuid\n  userId      String   @map(\"user_id\") @db.VarChar(255)\n  title       String   @db.VarChar(150)\n  description String?  @db.Text\n  completed   Boolean  @default(false)\n  createdAt   DateTime @default(now()) @map(\"created_at\") @db.Timestamptz(3)\n  updatedAt   DateTime @updatedAt @map(\"updated_at\") @db.Timestamptz(3)\n\n  @@index([userId])\n  @@index([userId, createdAt])\n  @@map(\"todos\")\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},

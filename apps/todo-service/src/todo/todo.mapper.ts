@@ -7,7 +7,7 @@ export function toTodoResponse(todo: Todo): TodoResponse {
     id: todo.id,
     userId: todo.userId,
     title: todo.title,
-    description: todo.description,
+    description: todo.description ?? '',
     completed: todo.completed,
     createdAt: todo.createdAt.toISOString(),
     updatedAt: todo.updatedAt.toISOString(),

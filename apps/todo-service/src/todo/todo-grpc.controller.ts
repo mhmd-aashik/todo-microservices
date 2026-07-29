@@ -21,22 +21,24 @@ import { TodoService } from './todo.service';
 export class TodoGrpcController implements TodoServiceController {
   constructor(private readonly todoService: TodoService) {}
 
-  createTodo(request: CreateTodoRequest): TodoResponse {
-    const todo = this.todoService.create(request);
+  async createTodo(request: CreateTodoRequest): Promise<TodoResponse> {
+    const todo = await this.todoService.create(request);
 
     return toTodoResponse(todo);
   }
 
-  findAllTodos(request: FindAllTodosRequest): FindAllTodosResponse {
-    const todos = this.todoService.findAllByUserId(request.userId);
+  async findAllTodos(
+    request: FindAllTodosRequest,
+  ): Promise<FindAllTodosResponse> {
+    const todos = await this.todoService.findAllByUserId(request.userId);
 
     return {
       todos: todos.map(toTodoResponse),
     };
   }
 
-  findOneTodo(request: FindOneTodoRequest): TodoResponse {
-    const todo = this.todoService.findOneByUserId(
+  async findOneTodo(request: FindOneTodoRequest): Promise<TodoResponse> {
+    const todo = await this.todoService.findOneByUserId(
       request.userId,
       request.todoId,
     );
@@ -44,14 +46,17 @@ export class TodoGrpcController implements TodoServiceController {
     return toTodoResponse(todo);
   }
 
-  updateTodo(request: UpdateTodoRequest): TodoResponse {
-    const todo = this.todoService.update(request);
+  async updateTodo(request: UpdateTodoRequest): Promise<TodoResponse> {
+    const todo = await this.todoService.update(request);
 
     return toTodoResponse(todo);
   }
 
-  deleteTodo(request: DeleteTodoRequest): DeleteTodoResponse {
-    const deleted = this.todoService.delete(request.userId, request.todoId);
+  async deleteTodo(request: DeleteTodoRequest): Promise<DeleteTodoResponse> {
+    const deleted = await this.todoService.delete(
+      request.userId,
+      request.todoId,
+    );
 
     return {
       deleted,
