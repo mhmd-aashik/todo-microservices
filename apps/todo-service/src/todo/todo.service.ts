@@ -4,7 +4,10 @@ import { Injectable } from '@nestjs/common';
 
 import type { CreateTodoRequest, UpdateTodoRequest } from '@app/grpc-contracts';
 
-import { todoNotFoundException } from './todo.errors';
+import {
+  invalidTodoTitleException,
+  todoNotFoundException,
+} from './todo.errors';
 import type { Todo } from './todo.types';
 
 @Injectable()
@@ -12,12 +15,18 @@ export class TodoService {
   private readonly todos = new Map<string, Todo>();
 
   create(request: CreateTodoRequest): Todo {
+    const title = request.title.trim();
+
+    if (!title) {
+      throw invalidTodoTitleException();
+    }
+
     const now = new Date();
 
     const todo: Todo = {
       id: randomUUID(),
       userId: request.userId,
-      title: request.title.trim(),
+      title,
       description: request.description?.trim(),
       completed: false,
       createdAt: now,
@@ -48,9 +57,16 @@ export class TodoService {
   update(request: UpdateTodoRequest): Todo {
     const todo = this.findOneByUserId(request.userId, request.todoId);
 
+    const title =
+      request.title !== undefined ? request.title.trim() : todo.title;
+
+    if (!title) {
+      throw invalidTodoTitleException();
+    }
+
     const updatedTodo: Todo = {
       ...todo,
-      title: request.title !== undefined ? request.title.trim() : todo.title,
+      title,
       description:
         request.description !== undefined
           ? request.description.trim()

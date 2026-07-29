@@ -7,3 +7,17 @@ export function todoNotFoundException(): RpcException {
     message: 'Todo not found',
   });
 }
+
+export function invalidTodoTitleException(): RpcException {
+  return createRpcException(
+    status.INVALID_ARGUMENT,
+    'Todo title cannot be empty',
+  );
+}
+
+function createRpcException(code: status, message: string): RpcException {
+  return new RpcException({
+    code,
+    message,
+  });
+}
